@@ -168,9 +168,11 @@ answerSchema.pre('save', async function(next) {
 })
 
 // Pre-remove middleware to decrement question's answer count
-answerSchema.pre('remove', async function(next) {
+answerSchema.pre('deleteOne', { document: true, query: false }, async function(next) {
   const Question = mongoose.model('Question')
-  await Question.findByIdAndUpdate(this.question, { $inc: { answerCount: -1 } })
+  await Question.findByIdAndUpdate(this.question, {
+    $inc: { answerCount: -1 }
+  })
   next()
 })
 
