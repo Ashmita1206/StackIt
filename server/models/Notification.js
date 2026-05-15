@@ -113,7 +113,7 @@ notificationSchema.pre('save', async function(next) {
         .findOne({ recipient: this.recipient })
         .sort({ createdAt: 1 })
       if (oldestNotification) {
-        await oldestNotification.remove()
+        await oldestNotification.deleteOne()
       }
     }
   }
