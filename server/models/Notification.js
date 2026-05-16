@@ -13,7 +13,7 @@ const notificationSchema = new mongoose.Schema({
   },
   type: {
     type: String,
-    enum: ['comment', 'upvote', 'downvote', 'accepted'],
+    enum: ['comment', 'upvote', 'downvote', 'accepted', 'answer'],
     required: true
   },
   questionId: {
