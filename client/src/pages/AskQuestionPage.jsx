@@ -6,6 +6,7 @@ import { motion } from 'framer-motion'
 import { toast } from 'react-hot-toast'
 import { FiTag, FiX, FiHelpCircle } from 'react-icons/fi'
 import ReactQuill from 'react-quill'
+import './quill-dark.css'
 import 'react-quill/dist/quill.snow.css'
 import api from '../utils/api'
 
@@ -116,7 +117,7 @@ const AskQuestionPage = () => {
           <h1 className="text-3xl font-bold text-navy-900 dark:text-white mb-2">
             Ask a Question
           </h1>
-          <p className="text-navy-600 dark:text-navy-300">
+          <p className="text-navy-600 dark:text-gray-300">
             Share your knowledge and help others learn
           </p>
         </div>
@@ -167,7 +168,7 @@ const AskQuestionPage = () => {
                 modules={quillModules}
                 formats={quillFormats}
                 placeholder="Provide all the information someone would need to answer your question..."
-                className="bg-white dark:bg-navy-800"
+                className="bg-white dark:bg-navy-800 text-black dark:text-white quill-dark"
                 style={{ minHeight: '200px' }}
               />
             </div>

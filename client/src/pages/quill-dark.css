@@ -1,0 +1,29 @@
+.dark .quill-dark .ql-editor {
+  color: white;
+}
+
+.dark .quill-dark .ql-editor::before {
+  color: #cbd5e1;
+}
+
+.dark .quill-dark .ql-toolbar {
+  background-color: #1e293b;
+  border-color: #334155;
+}
+
+.dark .quill-dark .ql-container {
+  background-color: #0f172a;
+  border-color: #334155;
+}
+
+.dark .quill-dark .ql-stroke {
+  stroke: white;
+}
+
+.dark .quill-dark .ql-fill {
+  fill: white;
+}
+
+.dark .quill-dark .ql-picker {
+  color: white;
+}
