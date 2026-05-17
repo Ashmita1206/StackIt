@@ -14,6 +14,7 @@ const AskQuestionPage = () => {
   const [tagInput, setTagInput] = useState('')
   const [content, setContent] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
+
   const navigate = useNavigate()
   const queryClient = useQueryClient()
 
@@ -50,6 +51,7 @@ const AskQuestionPage = () => {
 
   const addTag = () => {
     const tag = tagInput.trim().toLowerCase()
+
     if (tag && !tags.includes(tag) && tags.length < 5) {
       setTags([...tags, tag])
       setTagInput('')
@@ -57,21 +59,28 @@ const AskQuestionPage = () => {
   }
 
   const removeTag = (tagToRemove) => {
-    setTags(tags.filter(tag => tag !== tagToRemove))
+    setTags(tags.filter((tag) => tag !== tagToRemove))
+  }
+
+  const getPlainTextContent = () => {
+    return content.replace(/<[^>]*>/g, '').trim()
   }
 
   const onSubmit = async (data) => {
+    const plainTextContent = getPlainTextContent()
+
     if (tags.length === 0) {
       toast.error('Please add at least one tag')
       return
     }
 
-    if (content.trim().length < 20) {
+    if (plainTextContent.length < 20) {
       toast.error('Question content must be at least 20 characters')
       return
     }
 
     setIsSubmitting(true)
+
     try {
       await createQuestionMutation.mutateAsync({
         title: data.title,
@@ -85,23 +94,30 @@ const AskQuestionPage = () => {
 
   const quillModules = {
     toolbar: [
-      [{ 'header': [1, 2, 3, false] }],
+      [{ header: [1, 2, 3, false] }],
       ['bold', 'italic', 'underline', 'strike'],
-      [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-      [{ 'color': [] }, { 'background': [] }],
-      [{ 'align': [] }],
+      [{ list: 'ordered' }, { list: 'bullet' }],
+      [{ color: [] }, { background: [] }],
+      [{ align: [] }],
       ['link', 'image', 'code-block'],
-      ['clean']
+      ['clean'],
     ],
   }
 
   const quillFormats = [
     'header',
-    'bold', 'italic', 'underline', 'strike',
-    'list', 'bullet',
-    'color', 'background',
+    'bold',
+    'italic',
+    'underline',
+    'strike',
+    'list',
+    'bullet',
+    'color',
+    'background',
     'align',
-    'link', 'image', 'code-block'
+    'link',
+    'image',
+    'code-block',
   ]
 
   return (
@@ -116,6 +132,7 @@ const AskQuestionPage = () => {
           <h1 className="text-3xl font-bold text-navy-900 dark:text-white mb-2">
             Ask a Question
           </h1>
+
           <p className="text-navy-600 dark:text-navy-300">
             Share your knowledge and help others learn
           </p>
@@ -124,9 +141,13 @@ const AskQuestionPage = () => {
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
           {/* Title */}
           <div>
-            <label htmlFor="title" className="block text-sm font-medium text-navy-700 dark:text-navy-300 mb-2">
+            <label
+              htmlFor="title"
+              className="block text-sm font-medium text-navy-700 dark:text-navy-300 mb-2"
+            >
               Title *
             </label>
+
             <input
               id="title"
               type="text"
@@ -144,11 +165,13 @@ const AskQuestionPage = () => {
               className="input-field"
               placeholder="What's your question? Be specific."
             />
+
             {errors.title && (
               <p className="mt-1 text-sm text-red-600 dark:text-red-400">
                 {errors.title.message}
               </p>
             )}
+
             <p className="mt-1 text-sm text-navy-500 dark:text-navy-400">
               Imagine you're asking another person
             </p>
@@ -159,6 +182,7 @@ const AskQuestionPage = () => {
             <label className="block text-sm font-medium text-navy-700 dark:text-navy-300 mb-2">
               Details *
             </label>
+
             <div className="border border-navy-300 dark:border-navy-600 rounded-lg overflow-hidden">
               <ReactQuill
                 theme="snow"
@@ -171,9 +195,13 @@ const AskQuestionPage = () => {
                 style={{ minHeight: '200px' }}
               />
             </div>
+
             <div className="mt-2 flex items-center justify-between text-sm text-navy-500 dark:text-navy-400">
               <span>Minimum 20 characters</span>
-              <span>{content.replace(/<[^>]*>/g, '').length} characters</span>
+
+              <span>
+                {getPlainTextContent().length} characters
+              </span>
             </div>
           </div>
 
@@ -182,6 +210,7 @@ const AskQuestionPage = () => {
             <label className="block text-sm font-medium text-navy-700 dark:text-navy-300 mb-2">
               Tags *
             </label>
+
             <div className="space-y-3">
               <div className="flex items-center space-x-2">
                 <input
@@ -193,6 +222,7 @@ const AskQuestionPage = () => {
                   className="input-field flex-1"
                   maxLength={20}
                 />
+
                 <button
                   type="button"
                   onClick={addTag}
@@ -212,7 +242,9 @@ const AskQuestionPage = () => {
                       className="badge badge-primary flex items-center space-x-1"
                     >
                       <FiTag className="w-3 h-3" />
+
                       <span>{tag}</span>
+
                       <button
                         type="button"
                         onClick={() => removeTag(tag)}
@@ -227,9 +259,15 @@ const AskQuestionPage = () => {
 
               <div className="flex items-start space-x-2 text-sm text-navy-500 dark:text-navy-400">
                 <FiHelpCircle className="w-4 h-4 mt-0.5 flex-shrink-0" />
+
                 <div>
-                  <p>Add up to 5 tags to describe what your question is about.</p>
-                  <p className="mt-1">Popular tags: javascript, react, nodejs, python, css, html</p>
+                  <p>
+                    Add up to 5 tags to describe what your question is about.
+                  </p>
+
+                  <p className="mt-1">
+                    Popular tags: javascript, react, nodejs, python, css, html
+                  </p>
                 </div>
               </div>
             </div>
@@ -240,6 +278,7 @@ const AskQuestionPage = () => {
             <h3 className="font-semibold text-blue-900 dark:text-blue-100 mb-2">
               Writing a good question
             </h3>
+
             <ul className="text-sm text-blue-800 dark:text-blue-200 space-y-1">
               <li>• Be specific and provide context</li>
               <li>• Include code examples if relevant</li>
@@ -258,9 +297,14 @@ const AskQuestionPage = () => {
             >
               Cancel
             </button>
+
             <button
               type="submit"
-              disabled={isSubmitting || tags.length === 0 || content.trim().length < 20}
+              disabled={
+                isSubmitting ||
+                tags.length === 0 ||
+                getPlainTextContent().length < 20
+              }
               className="btn-primary px-8 py-3 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isSubmitting ? (
@@ -279,4 +323,4 @@ const AskQuestionPage = () => {
   )
 }
 
-export default AskQuestionPage 
+export default AskQuestionPage
