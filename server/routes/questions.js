@@ -4,6 +4,7 @@ const Question = require('../models/Question')
 const Answer = require('../models/Answer')
 const User = require('../models/User')
 const { authenticateToken, requireAdmin } = require('../middleware/auth')
+const { acceptAnswer } = require('../services/answerAcceptance')
 
 const router = express.Router()
 
@@ -543,50 +544,17 @@ router.post('/:id/accept-answer', [
       })
     }
 
-    const question = await Question.findById(req.params.id)
-    const answer = await Answer.findById(req.body.answerId)
+    const { answer } = await acceptAnswer({
+      questionId: req.params.id,
+      answerId: req.body.answerId,
+      acceptedBy: req.user._id
+    })
 
-    if (!question || question.isDeleted) {
-      return res.status(404).json({ message: 'Question not found' })
-    }
-
-    if (!answer || answer.isDeleted) {
-      return res.status(404).json({ message: 'Answer not found' })
-    }
-
-    // Check permissions
-    if (question.author.toString() !== req.user._id.toString()) {
-      return res.status(403).json({ message: 'Only the question author can accept answers' })
-    }
-
-    // Accept the answer
-    await answer.accept(req.user._id)
-    await question.acceptAnswer(answer._id)
-
-    // Award reputation to answer author
-    await answer.author.updateReputation(15)
-
-    // Create notification for answer author (if not self)
-    if (answer.author.toString() !== req.user._id.toString()) {
-      try {
-        const notification = await require('../models/Notification').create({
-          recipient: answer.author,
-          sender: req.user._id,
-          type: 'accepted',
-          questionId: question._id,
-          answerId: answer._id
-        });
-        console.log('📩 Notification created:', notification);
-      } catch (error) {
-        console.error('❌ Error creating answer accepted notification:', error);
-      }
-    }
-
-    res.json({ message: 'Answer accepted successfully' })
+    res.json({ message: 'Answer accepted successfully', acceptedAnswer: answer._id })
   } catch (error) {
     console.error('Accept answer error:', error)
-    res.status(500).json({ message: 'Server error' })
+    res.status(error.statusCode || 500).json({ message: error.message || 'Server error' })
   }
 })
 
-module.exports = router 
+module.exports = router
