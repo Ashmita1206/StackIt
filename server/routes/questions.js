@@ -92,16 +92,12 @@ router.get('/', async (req, res) => {
         sortOption = { viewCount: -1 }
         break
       case 'trending':
-        // Simple trending algorithm: recent questions with votes
-        sortOption = { 
-          $expr: {
-            $divide: [
-              { $add: [{ $size: '$votes.upvotes' }, { $size: '$votes.downvotes' }] },
-              { $add: [{ $subtract: [new Date(), '$createdAt'] }, 1] }
-            ]
-          }
-        }
-        break
+  // Sort by most voted and recent questions
+  sortOption = {
+    'votes.upvotes': -1,
+    createdAt: -1
+  }
+  break
     }
 
     const questions = await Question.find(query)
