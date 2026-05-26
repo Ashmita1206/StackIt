@@ -160,7 +160,7 @@ const NotificationDropdown = () => {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -10, scale: 0.95 }}
             transition={{ duration: 0.2 }}
-            className="absolute right-0 mt-2 w-80 bg-white dark:bg-navy-800 rounded-lg shadow-lg border border-navy-200 dark:border-navy-700 z-50"
+            className="absolute right-0 mt-2 w-80 overflow-hidden rounded-xl border border-navy-200 dark:border-navy-700 bg-white dark:bg-navy-800 shadow-2xl z-50"
           >
             {/* Header */}
             <div className="flex items-center justify-between p-4 border-b border-navy-200 dark:border-navy-700">
@@ -198,14 +198,16 @@ const NotificationDropdown = () => {
               ) : (
                 notifications.map((notification) => (
                   <motion.div
-                    key={notification._id}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    className={`p-4 border-b border-navy-100 dark:border-navy-700 cursor-pointer hover:bg-navy-50 dark:hover:bg-navy-700/50 transition-colors ${
-                      !notification.read ? 'bg-blue-50 dark:bg-blue-900/20' : ''
-                    }`}
-                    onClick={() => handleNotificationClick(notification)}
-                  >
+  key={notification._id}
+  initial={{ opacity: 0, x: -20 }}
+  animate={{ opacity: 1, x: 0 }}
+  className={`group p-4 border-b border-navy-100 dark:border-navy-700 cursor-pointer hover:bg-navy-50 dark:hover:bg-navy-700/50 transition-colors ${
+    !notification.read
+      ? 'bg-blue-50 dark:bg-blue-900/30 border-l-4 border-blue-500'
+      : ''
+  }`}
+  onClick={() => handleNotificationClick(notification)}
+>
                     <div className="flex items-start space-x-3">
                       <div className="flex-shrink-0 mt-1">
                         {getNotificationIcon(notification.type)}
@@ -216,7 +218,7 @@ const NotificationDropdown = () => {
                             {notification.sender?.username || 'Unknown User'}
                           </p>
                           <div className="flex items-center space-x-1">
-                            <span className="text-xs text-navy-500 dark:text-navy-400">
+                            <span className="text-xs text-navy-600 dark:text-navy-300">
                               {formatTimeAgo(notification.createdAt)}
                             </span>
                             <button
@@ -227,7 +229,7 @@ const NotificationDropdown = () => {
                             </button>
                           </div>
                         </div>
-                        <p className="text-sm text-navy-600 dark:text-navy-300 mt-1">
+                        <p className="mt-1 text-sm text-navy-700 dark:text-navy-200">
                           {notification.content}
                         </p>
                         {!notification.read && (
