@@ -10,7 +10,7 @@ describe('Critical User Flows', () => {
 
   beforeAll(async () => {
     // Connect to test database
-    await mongoose.connect(process.env.MONGODB_URI_TEST || 'mongodb://localhost:27017/stackit-test')
+    await mongoose.connect(process.env.MONGODB_URI_TEST || 'mongodb://127.0.0.1:27017/stackit-test')
   })
 
   afterAll(async () => {

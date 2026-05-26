@@ -18,8 +18,8 @@ if (!process.env.JWT_SECRET) {
   process.env.PORT = process.env.PORT || '5000';
   process.env.NODE_ENV = process.env.NODE_ENV || 'development';
   process.env.MONGODB_URI =
-    process.env.MONGODB_URI || 'mongodb://localhost:27017/stackit';
-  process.env.CLIENT_URL = process.env.CLIENT_URL || 'http://localhost:3000';
+    process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/stackit';
+  process.env.CLIENT_URL = process.env.CLIENT_URL || 'http://127.0.0.1:3000';
 }
 
 console.log('✅ JWT_SECRET loaded:', !!process.env.JWT_SECRET);
@@ -45,7 +45,7 @@ const server = createServer(app);
 // Socket.io setup
 const io = new Server(server, {
   cors: {
-    origin: process.env.CLIENT_URL || 'http://localhost:3000',
+    origin: process.env.CLIENT_URL || 'http://127.0.0.1:3000',
     methods: ['GET', 'POST'],
   },
 });
@@ -92,7 +92,7 @@ if (shouldEnableRateLimit()) {
 app.use(helmet());
 app.use(
   cors({
-    origin: process.env.CLIENT_URL || 'http://localhost:3000',
+    origin: process.env.CLIENT_URL || 'http://127.0.0.1:3000',
     credentials: true,
   }),
 );
