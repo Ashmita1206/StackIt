@@ -8,8 +8,8 @@ Thank you for your interest in contributing to StackIt! This document provides g
 1. Fork the repository on GitHub
 2. Clone your fork locally:
    ```bash
-   git clone https://github.com/yourusername/stackit-qa-platform.git
-   cd stackit-qa-platform
+   git clone https://github.com/yourusername/StackIt.git
+   cd StackIt
    ```
 
 ### 2. Setup Development Environment
